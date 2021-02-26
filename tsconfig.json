@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
-    "outDir": "./dist", // output of generated js code
-    "module": "CommonJS",
-    "target": "ES2019", // which version to convert
-    "esModuleInterop": true, //convert modules,
-    "allowJs": true // allow js files to be compiled
+    "outDir": "./dist",
+    "module": "commonjs",
+    "target": "ES2019",
+    "esModuleInterop": true,
+    "allowJs": true,
+    "strictNullChecks": true
   }
 }
