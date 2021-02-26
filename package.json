@@ -1,5 +1,5 @@
 {
-  "name": "tdd-com-mango",
+  "name": "tdd-node-ts",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,7 +8,7 @@
     "test:staged": "jest"
   },
   "keywords": [],
-  "author": "",
+  "author": "Igor Marini Jaekel Quevedo",
   "license": "ISC",
   "devDependencies": {
     "@types/jest": "^26.0.20",
