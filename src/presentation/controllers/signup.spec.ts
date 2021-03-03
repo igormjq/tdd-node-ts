@@ -229,4 +229,27 @@ describe('SignUp Controller', () => {
 
     expect(spyOnAddAccount).toHaveBeenCalledWith(payload)
   })
+
+  test('Should return 201 if account is added successfully', () => {
+    const { sut } = makeSut()
+
+    const httpRequest = {
+      body: {
+        name: 'valid_name',
+        email: 'valid_email@mail.com',
+        password: 'valid_password',
+        passwordConfirmation: 'valid_password'
+      }
+    }
+
+    const response = sut.handle(httpRequest)
+
+    expect(response.statusCode).toBe(201)
+    expect(response.body).toEqual({
+      id: 'any_id',
+      name: 'valid_name',
+      email: 'valid_email@mail.com',
+      password: 'valid_password'
+    })
+  })
 })
