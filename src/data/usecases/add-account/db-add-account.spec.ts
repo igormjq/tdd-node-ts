@@ -1,10 +1,5 @@
-import { Encrypter } from './db-add-account-protocols'
+import { Encrypter, AddAccountModel, AccountModel, AddAccountRepository } from './db-add-account-protocols'
 import { DbAddAccount } from './db-add-account'
-
-interface SutTypes {
-  sut: DbAddAccount
-  encrypterStub: Encrypter
-}
 
 const makeEncrypter = (): Encrypter => {
   class EncrypterStub implements Encrypter {
@@ -15,14 +10,36 @@ const makeEncrypter = (): Encrypter => {
   return new EncrypterStub()
 }
 
+const makeAddAccountRepository = (): AddAccountRepository => {
+  class AddAccountRepositoryStub implements AddAccountRepository {
+    async add (accountData: AddAccountModel): Promise<AccountModel> {
+      return await Promise.resolve({
+        ...accountData,
+        id: 'any_id',
+        password: 'hashed_password'
+      })
+    }
+  }
+  return new AddAccountRepositoryStub()
+}
+
 const makeSut = (): SutTypes => {
   const encrypterStub = makeEncrypter()
-  const sut = new DbAddAccount(encrypterStub)
+  const addAccountRepositoryStub = makeAddAccountRepository()
+
+  const sut = new DbAddAccount(encrypterStub, addAccountRepositoryStub)
 
   return {
     sut,
-    encrypterStub
+    encrypterStub,
+    addAccountRepositoryStub
   }
+}
+
+interface SutTypes {
+  sut: DbAddAccount
+  encrypterStub: Encrypter
+  addAccountRepositoryStub: AddAccountRepository
 }
 
 describe('DbAddAccount Usecase', () => {
@@ -57,5 +74,22 @@ describe('DbAddAccount Usecase', () => {
     const promised = sut.add(accountData)
 
     await expect(promised).rejects.toThrow()
+  })
+
+  test('Should call AddAccountRepository with correct values', async () => {
+    const { sut, addAccountRepositoryStub } = makeSut()
+    const addSpy = jest.spyOn(addAccountRepositoryStub, 'add')
+
+    await sut.add({
+      name: 'valid name',
+      email: 'valid_email@mail.com',
+      password: 'valid_password'
+    })
+
+    expect(addSpy).toHaveBeenCalledWith({
+      name: 'valid name',
+      email: 'valid_email@mail.com',
+      password: 'hashed_password'
+    })
   })
 })
