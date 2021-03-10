@@ -93,6 +93,23 @@ describe('DbAddAccount Usecase', () => {
     })
   })
 
+  test('Should return an account', async () => {
+    const { sut } = makeSut()
+
+    const accountCreated = await sut.add({
+      name: 'valid_name',
+      email: 'valid_email@mail.com',
+      password: 'valid_password'
+    })
+
+    expect(accountCreated).toEqual({
+      id: 'any_id',
+      name: 'valid_name',
+      email: 'valid_email@mail.com',
+      password: 'hashed_password'
+    })
+  })
+
   test('Should throw if AddAccountRepository throws', async () => {
     const { sut, addAccountRepositoryStub } = makeSut()
     const accountData = {
