@@ -6,6 +6,8 @@ const makeSut = (): AccountMongoRepository => new AccountMongoRepository()
 describe('Account Mongo Repository', () => {
   beforeAll(async () => await MongoHelper.connect(process.env.MONGO_URL))
 
+  beforeEach(async () => await MongoHelper.clear('accounts'))
+
   afterAll(async () => await MongoHelper.disconnect())
 
   test('Should return an account on success', async () => {
