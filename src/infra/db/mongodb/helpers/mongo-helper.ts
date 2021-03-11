@@ -14,7 +14,7 @@ export const MongoHelper = {
     await this.client.close()
   },
 
-  getColletion (name: string): Collection {
+  getCollection (name: string): Collection {
     return this.client.db().collection(name)
   },
 
@@ -22,5 +22,11 @@ export const MongoHelper = {
     const targetCollection = this.getCollection(collection)
 
     await targetCollection.deleteMany({})
+  },
+
+  map (document: any): any {
+    const { _id: id, ...data } = document
+
+    return Object.assign({}, data, { id })
   }
 }
