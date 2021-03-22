@@ -7,3 +7,4 @@ MongoHelper.connect(env.mongoUrl)
   .then(() => {
     app.listen(env.port, () => console.log(`Server up and running at http://localhost:${env.port}`))
   })
+  .catch(console.log)
